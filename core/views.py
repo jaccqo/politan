@@ -8,6 +8,7 @@ from .models import Project,Service,Blog,Comment,Testimonial,Client
 
 from django.db.models import Count
 from django.core.paginator import Paginator
+import random 
 
 def home(request):
     # Get all projects, sorted by date (most recent first)
@@ -51,17 +52,24 @@ def about(request):
 
 
 def get_quote(request, service_slug):
-    # Fetch the service from the database or return 404 if not found
+    # Fetch the selected service from the database or return 404 if not found
     service = get_object_or_404(Service, slug=service_slug)
 
-    # Store the selected service in session
+    # Store the selected service in session for later reference
     request.session['selected_service'] = {
         "name": service.name,
         "description": service.description,
     }
 
-    # Render the quote page with service details
-    return render(request, 'get_quote.html', {'service': service})
+    # Fetch all services and exclude the current one, then shuffle for randomness
+    all_services = Service.objects.exclude(slug=service_slug)
+    related_services = random.sample(list(all_services), min(3, len(all_services)))
+
+    # Render the quote page with service details and related services
+    return render(request, 'get_quote.html', {
+        'service': service,
+        'related_services': related_services,
+    })
 
 
 def submit_quote(request):

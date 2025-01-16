@@ -57,33 +57,42 @@
             fill:rgb(255, 255, 255); /* or any light color you prefer */
         }
      </style>
-    <script>
+     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const header = document.querySelector('.header');
             const svg = document.querySelector('svg');
-        
+            
+            // Define a threshold for small screen (e.g., max width 768px)
+            const smallScreenWidth = 768;
+    
             function updateSVGColor() {
-                if (header.classList.contains('header-transparent') && 
-                    !header.classList.contains('header-small') && 
-                    !header.classList.contains('header-shadow')) {
-                    svg.classList.remove('dark-fill');
-                    svg.classList.add('light-fill');
-                    console.log("SVG color set to light (header-transparent)");
+                // Only run the logic for screens larger than the threshold
+                if (window.innerWidth > smallScreenWidth) {
+                    if (header.classList.contains('header-transparent') && 
+                        !header.classList.contains('header-small') && 
+                        !header.classList.contains('header-shadow')) {
+                        svg.classList.remove('dark-fill');
+                        svg.classList.add('light-fill');
+                        console.log("SVG color set to light (header-transparent)");
+                    } else {
+                        svg.classList.remove('light-fill');
+                        svg.classList.add('dark-fill');
+                        console.log("SVG color set to dark");
+                    }
                 } else {
-                    svg.classList.remove('light-fill');
-                    svg.classList.add('dark-fill');
-                    console.log("SVG color set to dark");
+                    console.log("Small screen detected, no SVG color change.");
                 }
             }
-        
+    
             // Initial check when the page loads
             updateSVGColor();
-        
+    
             // Observe changes in the header's classes
             const observer = new MutationObserver(updateSVGColor);
             observer.observe(header, { attributes: true, class: true });
         });
     </script>
+    
     
     <header class="header header-transparent">
         <div class="container-fluid">

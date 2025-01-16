@@ -5,7 +5,7 @@
 <section class="module">
     <div class="container">
         <div class="row">
-            
+
             <div class="col-md-8">
                 <div class="row gallery-group">
                     {% for image in service.images.all %}
@@ -66,6 +66,7 @@
 
 <!-- Related Services -->
 <!-- Related Services -->
+<!-- Related Services -->
 <section class="module divider-top">
     <div class="container">
         <div class="row">
@@ -80,48 +81,34 @@
         </div>
         <div class="row row-portfolio" data-columns="3">
             <div class="grid-sizer"></div>
-            <div class="portfolio-item branding">
-                <div class="portfolio-item-wrapper">
-                    <a href="{% url 'core:get_quote' 'playground-safety-flooring' %}">
-                        <div class="portfolio-item-img">
-                            <img src="{% static 'assets/images/portfolio/1.jpg' %}" alt="Playground Safety Flooring">
-                        </div>
-                        <div class="portfolio-item-caption">
-                            <h6 class="portfolio-item-title">Playground Safety Flooring</h6>
-                            <span class="portfolio-item-subtitle serif">Durable and Safe</span>
-                        </div>
-                    </a>
+            {% for related_service in related_services %}
+                <div class="portfolio-item">
+                    <div class="portfolio-item-wrapper">
+                        <a href="{% url 'core:get_quote' related_service.slug %}">
+                            <div class="portfolio-item-img">
+                                <!-- Display the first image associated with the related service -->
+                                {% if related_service.images.all %}
+                                    <img src="{{ related_service.images.first.image.url }}" alt="{{ related_service.name }}">
+                                {% else %}
+                                    <img src="{% static 'assets/images/portfolio/default.jpg' %}" alt="Default Image">
+                                {% endif %}
+                            </div>
+                            <div class="portfolio-item-caption">
+                                <h6 class="portfolio-item-title">{{ related_service.name }}</h6>
+                                <span class="portfolio-item-subtitle serif">{{ related_service.description|truncatewords:10 }}</span>
+                            </div>
+                        </a>
+                    </div>
                 </div>
-            </div>
-            <div class="portfolio-item digital">
-                <div class="portfolio-item-wrapper">
-                    <a href="{% url 'core:get_quote' 'artificial-grass-installation' %}">
-                        <div class="portfolio-item-img">
-                            <img src="{% static 'assets/images/portfolio/2.jpg' %}" alt="Artificial Grass Installation">
-                        </div>
-                        <div class="portfolio-item-caption">
-                            <h6 class="portfolio-item-title">Artificial Grass Installation</h6>
-                            <span class="portfolio-item-subtitle serif">Eco-Friendly & Low Maintenance</span>
-                        </div>
-                    </a>
+            {% empty %}
+                <div class="col-md-12 text-center">
+                    <p>No related services available.</p>
                 </div>
-            </div>
-            <div class="portfolio-item packaging">
-                <div class="portfolio-item-wrapper">
-                    <a href="{% url 'core:get_quote' 'rubber-mulch' %}">
-                        <div class="portfolio-item-img">
-                            <img src="{% static 'assets/images/portfolio/3.jpg' %}" alt="Rubber Mulch">
-                        </div>
-                        <div class="portfolio-item-caption">
-                            <h6 class="portfolio-item-title">Rubber Mulch</h6>
-                            <span class="portfolio-item-subtitle serif">Eco-Friendly and Durable</span>
-                        </div>
-                    </a>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 </section>
+
 
 <script>
     $(document).ready(function () {
