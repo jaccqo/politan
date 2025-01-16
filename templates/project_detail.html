@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{%load static%}
+{% block content %}
+
+<section class="module">
+    <div class="container">
+        <div class="row">
+            <!-- Gallery Section -->
+            <div class="col-md-8">
+                <div class="row gallery-group">
+                    {% for image in project.images.all %}
+                        <div class="col-md-6 m-b-30">
+                            <a href="{{ image.image.url }}" title="{{ project.title }}">
+                                <img src="{{ image.image.url }}" alt="{{ project.title }}">
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Project Details Section -->
+            <div class="col-md-4">
+                <div class="sticky-sidebar">
+                    <h6 class="single-portfolio-title">{{ project.title }}</h6>
+                    <p>{{ project.description }}</p>
+                    <hr class="m-t-30 m-b-30">
+                    <div class="info-list">
+                        <li><span class="info-list-title">Date:</span><span>{{ project.date }}</span></li>
+                        <li><span class="info-list-title">Client:</span><span>{{ project.client }}</span></li>
+                        <li><span class="info-list-title">Category:</span><span>{{ project.category }}</span></li>
+                    </div>
+                    <hr class="m-t-30 m-b-30">
+                    <div class="info-list">
+                        <li>
+                            <span class="info-list-title">Share:</span>
+                            <span>
+                                <ul class="social-icons">
+                                    <li>
+                                        <a href="https://twitter.com/intent/tweet?text={{ project.title }}&url={{ request.build_absolute_uri }}" target="_blank" title="Share on Twitter">
+                                            <i class="ti-twitter"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="https://www.instagram.com/" target="_blank" title="Share on Instagram">
+                                            <i class="ti-instagram"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="https://pinterest.com/pin/create/button/?url={{ request.build_absolute_uri }}&description={{ project.title }}" target="_blank" title="Share on Pinterest">
+                                            <i class="ti-pinterest"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </span>
+                        </li>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

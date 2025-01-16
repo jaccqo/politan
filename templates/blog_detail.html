@@ -1,0 +1,401 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{%block content%}
+
+    <style>
+        .status-message {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+    
+        .status-message.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+    
+        .status-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        #search-results {
+            position: absolute;
+            top: 40px;  /* Adjust based on your form input height */
+            left: 0;
+            right: 0;
+            background-color: white;
+            border: 1px solid #ddd;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;  /* Hidden by default */
+        }
+        
+        .search-result-item {
+            display: flex;
+            justify-content: space-between;  /* Space between title and image */
+            align-items: center;
+            padding: 10px;
+            text-decoration: none;
+            color: #333;
+        }
+        
+        .search-result-item:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .search-result-title {
+            flex-grow: 1;  /* This makes sure the title takes available space */
+            text-align: left;  /* Ensure title is aligned to the left */
+        }
+        
+        .search-result-image {
+            width: 30px; /* Small size for the image */
+            height: 30px; /* Small size for the image */
+            border-radius: 50%; /* Makes the image round */
+            object-fit: cover; /* Ensures the image covers the rounded area */
+            margin-left: 10px;  /* Space between title and image */
+        }
+        
+
+        /* Optional: Make the Clear Filters button more prominent */
+        .btn-outline-success {
+            font-weight: bold;
+            color: #28a745;
+            border-color: #28a745;
+        }
+        
+        .btn-outline-success:hover {
+            background-color:rgb(24, 29, 26);
+            color: #ffffff;
+        }
+    </style>
+    
+    <section class="module-cover parallax text-center" 
+        style="background-image: url('{% if background_image %}{{ background_image }}{% else %}assets/images/default-cover.jpg{% endif %}');" 
+        data-overlay="0.3">
+        <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>{{ blog.title }}</h2> <!-- Dynamically setting the title -->
+                <ol class="breadcrumb justify-content-center">
+                    {% for item in breadcrumb %}
+                    <li class="breadcrumb-item">
+                        <a href="{{ item.url }}">{{ item.name }}</a>
+                    </li>
+                    {% endfor %}
+                </ol>
+            </div>
+        </div>
+        </div>
+        </section>
+
+
+<section class="module">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 order-lg-2">
+                <!-- Post -->
+                <article class="post">
+                    <div class="post-preview">
+                        <img src="{{ blog.image.url }}" alt="{{ blog.title }}">
+                    </div>
+                    <div class="post-wrapper">
+                        <div class="post-header">
+                            <h1 class="post-title">{{ blog.title }}</h1>
+                            <ul class="post-meta">
+                                <li>{{ blog.published_date|date:"F d, Y" }}</li>
+                                <li>In <a href="#">{{ blog.category }}</a></li>
+                                <li>{{ blog.comments.count }} Comments</li>
+                            </ul>
+                        </div>
+                        <div class="post-content">
+                            <p>{{ blog.content }}</p>
+                        </div>
+                        <div class="post-footer">
+                            <div class="post-tags">
+                                {% for tag in blog.tags.all %}
+                                    <a href="#">{{ tag.name }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <!-- Post end -->
+
+                <!-- Comments area -->
+                <div class="comments-area m-b-50">
+                    <h5 class="comments-title">{{ blog.comments.count }} Comments</h5>
+                    <div class="comment-list">
+                        {% for comment in blog.comments.all %}
+                        <!-- Comment -->
+                        <div class="comment">
+                            <div class="comment-author">
+                                <i class="fa fa-user-circle fa-3x"></i> <!-- FontAwesome icon for avatar -->
+                            </div>
+                            <div class="comment-body">
+                                <div class="comment-meta">
+                                    <div class="comment-meta-author">
+                                        <a href="#">{{ comment.name }}</a>
+                                    </div>
+                                    <div class="comment-meta-date">
+                                        <a href="#">{{ comment.created_date|date:"F d, Y h:i A" }}</a>
+                                    </div>
+                                </div>
+                                <div class="comment-content">
+                                    <p>{{ comment.content }}</p>
+                                </div>
+                                {% comment %} <div class="comment-reply">
+                                    <a href="#">Reply</a>
+                                </div> {% endcomment %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="comment-respond">
+                        <h5 class="comment-reply-title">Leave a Reply</h5>
+                        <p class="comment-notes">Your email address will not be published. Required fields are marked</p>
+                        <form class="comment-form row" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="blog_id" value="{{ blog.id }}">
+                            <div class="form-group col-md-4">
+                                <input class="form-control" type="text" name="name" placeholder="Name" required>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <input class="form-control" type="email" name="email" placeholder="Email" required>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <textarea class="form-control" name="content" rows="8" placeholder="Comment" required></textarea>
+                            </div>
+                            <div class="form-submit col-md-12">
+                                <button class="btn btn-dark" type="submit">Post Comment</button>
+                            </div>
+                        </form>
+                        <div id="comment-status" class="status-message" style="display:none;"></div>
+                    </div>
+                </div>
+                
+                <!-- Comments area end -->
+            </div>
+            <div class="col-lg-4 order-lg-1">
+                <div class="sidebar">
+
+                    <!-- Search widget -->
+                     <!-- Search widget -->
+                    <aside class="widget widget-search">
+                        <form id="search-form">
+                            <input class="form-control" type="search" id="search-input" placeholder="Type Search Words" autocomplete="off">
+                         
+                            <div id="search-results" class="search-results-dropdown"></div>
+                        </form>
+                    </aside>
+
+                    <!-- Categories widget -->
+               <!-- Categories Widget -->
+               <aside class="widget widget-categories">
+                <div class="widget-title">
+                    <h6>Categories</h6>
+                </div>
+                <ul>
+                    {% for category in categories %}
+                    <li>
+                        <a href="{% url 'core:blog_list' %}?category={{ category.category }}&tag={{ request.GET.tag }}"
+                        {% if category.category == request.GET.category %}class="text-success"{% endif %}>
+                            {{ category.category }}
+                            <span class="float-right">{{ category.count }}</span>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </aside>
+                            
+
+
+             
+                    <!-- Recent Entries Widget -->
+                    <aside class="widget widget-recent-entries-custom">
+                        <div class="widget-title">
+                            <h6>Recent Posts</h6>
+                        </div>
+                        <ul>
+                            {% for recent_blog in recent_posts %}
+                            <li class="clearfix">
+                                <div class="wi">
+                                    <a href="{{ recent_blog.get_absolute_url }}">
+                                        <img src="{{ recent_blog.image.url }}" alt="{{ recent_blog.title }}">
+                                    </a>
+                                </div>
+                                <div class="wb">
+                                    <a href="{{ recent_blog.get_absolute_url }}">{{ recent_blog.title }}</a>
+                                    <span class="post-date">{{ recent_blog.published_date|date:"F d, Y" }}</span>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </aside>
+
+
+                    <!-- Tags widget -->
+                        <!-- Tags Widget -->
+                    <aside class="widget widget-tag-cloud">
+                        <div class="widget-title">
+                            <h6>Tags</h6>
+                        </div>
+                        <div class="tag-cloud">
+                            {% for tag in tags %}
+                            <a href="{% url 'core:blog_list' %}?tag={{ tag.name }}&category={{ request.GET.category }}" 
+                            {% if tag.name == request.GET.tag %}class="text-success"{% endif %}>
+                            {{ tag.name }}
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </aside>
+
+                    <aside class="widget widget-tag-cloud">
+                        <div class="widget-title">
+                            <h6>Clear Filters</h6>
+                        </div>
+                        <!-- Clear Filters button that removes category and tag from the URL -->
+                        <a class="btn btn-circle btn-outline-success" href="{% url 'core:blog_list' %}">
+                            <span class="btn-icon-left fas fa-filter"></span> Clear
+                        </a>
+                    </aside>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const commentForm = document.querySelector(".comment-form");
+        const statusMessage = document.getElementById("comment-status");  // Reference to the status message div
+
+        if (commentForm) {
+            commentForm.addEventListener("submit", function (e) {
+                e.preventDefault(); // Prevent normal form submission
+
+                const formData = new FormData(commentForm);
+
+                fetch("{% url 'core:post_comment' %}", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
+                    },
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Show success message
+                        statusMessage.style.display = "block";
+                        statusMessage.textContent = "Your comment has been successfully posted!";
+                        statusMessage.classList.remove('error');
+                        statusMessage.classList.add('success');
+
+                        // Add the new comment to the comment list
+                        const commentList = document.querySelector(".comment-list");
+                        const newComment = `
+                            <div class="comment">
+                                <div class="comment-author">
+                                    <i class="fa fa-user-circle fa-3x"></i>
+                                </div>
+                                <div class="comment-body">
+                                    <div class="comment-meta">
+                                        <div class="comment-meta-author">
+                                            <a href="#">${data.comment.name}</a>
+                                        </div>
+                                        <div class="comment-meta-date">
+                                            <a href="#">${data.comment.created_date}</a>
+                                        </div>
+                                    </div>
+                                    <div class="comment-content">
+                                        <p>${data.comment.content}</p>
+                                    </div>
+                                    {% comment %} <div class="comment-reply">
+                                    <a href="#">Reply</a>
+                                    </div> {% endcomment %}
+                                </div>
+                            </div>`;
+                        commentList.innerHTML += newComment;
+
+                        commentForm.reset(); // Clear the form fields
+                    } else {
+                        // Show error message
+                        statusMessage.style.display = "block";
+                        statusMessage.textContent = data.error || "An error occurred. Please try again.";
+                        statusMessage.classList.remove('success');
+                        statusMessage.classList.add('error');
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+
+                    // Show error message
+                    statusMessage.style.display = "block";
+                    statusMessage.textContent = "An unexpected error occurred. Please try again.";
+                    statusMessage.classList.remove('success');
+                    statusMessage.classList.add('error');
+                });
+            });
+        }
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById('search-input');
+        const searchResultsDropdown = document.getElementById('search-results');
+        const searchForm = document.getElementById('search-form');
+
+        searchInput.addEventListener('input', function () {
+            const query = searchInput.value.trim();
+            if (query.length < 2) {
+                // Hide the search results if query length is less than 2 characters
+                searchResultsDropdown.innerHTML = '';
+                searchResultsDropdown.style.display = 'none';
+                return;
+            }
+
+            // Send AJAX request to search for blogs
+            fetch("{% url 'core:search_blog' %}?q=" + query)
+                .then(response => response.json())
+                .then(data => {
+                    const results = data.results;
+                    if (results.length > 0) {
+                        // Clear previous results and show new ones
+                        searchResultsDropdown.innerHTML = results.map(result => `
+                            <a href="${result.url}" class="search-result-item">
+                                <span class="search-result-title">${result.title}</span>
+                                <img src="${result.image_url}" alt="${result.title}" class="search-result-image">
+                            </a>
+                        `).join('');
+                        searchResultsDropdown.style.display = 'block';
+                    } else {
+                        searchResultsDropdown.innerHTML = '<p>No results found</p>';
+                        searchResultsDropdown.style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    searchResultsDropdown.innerHTML = '<p>Error fetching results</p>';
+                    searchResultsDropdown.style.display = 'block';
+                });
+        });
+
+        // Close the dropdown if user clicks outside
+        document.addEventListener('click', function (e) {
+            if (!searchForm.contains(e.target)) {
+                searchResultsDropdown.style.display = 'none';
+            }
+        });
+    });
+</script>
+
+
+{%endblock%}
+<!-- Blog end -->

@@ -1,0 +1,278 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{%block content%}
+
+<style>
+    
+    #search-results {
+        position: absolute;
+        top: 40px;  /* Adjust based on your form input height */
+        left: 0;
+        right: 0;
+        background-color: white;
+        border: 1px solid #ddd;
+        max-height: 200px;
+        overflow-y: auto;
+        display: none;  /* Hidden by default */
+    }
+    
+    .search-result-item {
+        display: flex;
+        justify-content: space-between;  /* Space between title and image */
+        align-items: center;
+        padding: 10px;
+        text-decoration: none;
+        color: #333;
+    }
+    
+    .search-result-item:hover {
+        background-color: #f0f0f0;
+    }
+    
+    .search-result-title {
+        flex-grow: 1;  /* This makes sure the title takes available space */
+        text-align: left;  /* Ensure title is aligned to the left */
+    }
+    
+    .search-result-image {
+        width: 30px; /* Small size for the image */
+        height: 30px; /* Small size for the image */
+        border-radius: 50%; /* Makes the image round */
+        object-fit: cover; /* Ensures the image covers the rounded area */
+        margin-left: 10px;  /* Space between title and image */
+    }
+    
+  
+    /* Optional: Make the Clear Filters button more prominent */
+.btn-outline-success {
+    font-weight: bold;
+    color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-outline-success:hover {
+    background-color:rgb(24, 29, 26);
+    color: #ffffff;
+}
+
+    
+    
+</style>
+
+
+
+<section class="module">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 order-lg-2">
+                <div class="row row-post-thumbnail">
+                    <!-- Blog Posts -->
+                    {% for blog in blogs %}
+                    <article class="post row align-items-center">
+                        <div class="col-md-5">
+                            <div class="post-preview">
+                                <a href="{{ blog.get_absolute_url }}">
+                                    <img src="{{ blog.image.url }}" alt="{{ blog.title }}">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="post-wrapper">
+                                <div class="post-header">
+                                    <h2 class="post-title">
+                                        <a href="{{ blog.get_absolute_url }}">{{ blog.title }}</a>
+                                    </h2>
+                                    <ul class="post-meta">
+                                        <li>{{ blog.published_date|date:"F d, Y" }}</li>
+                                        <li>
+                                            <a href="?category={{ blog.category }}">{{ blog.category }}</a>
+                                        </li>
+                                        <li>
+                                            {% for tag in blog.tags.all %}
+                                            <a href="?tag={{ tag.name }}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+                                            {% endfor %}
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="post-content">
+                                    <p>{{ blog.content|truncatewords:30 }}</p>
+                                    <p><a href="{{ blog.get_absolute_url }}">Read more</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                    {% endfor %}
+                    
+                </div>
+
+                <!-- Pagination -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <nav>
+                            <ul class="pagination justify-content-center">
+                                {% if blogs.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ blogs.previous_page_number }}" aria-label="Previous">
+                                        <span class="fas fa-angle-left"></span>
+                                    </a>
+                                </li>
+                                {% endif %}
+                                {% for page_num in blogs.paginator.page_range %}
+                                <li class="page-item {% if page_num == blogs.number %}active{% endif %}">
+                                    <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+                                </li>
+                                {% endfor %}
+                                {% if blogs.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ blogs.next_page_number }}" aria-label="Next">
+                                        <span class="fas fa-angle-right"></span>
+                                    </a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="col-lg-4 order-lg-1">
+                <div class="sidebar">
+
+                    <!-- Search Widget -->
+                    <aside class="widget widget-search">
+                        <form id="search-form">
+                            <input class="form-control" type="search" id="search-input" placeholder="Type Search Words" autocomplete="off">
+                         
+                            <div id="search-results" class="search-results-dropdown"></div>
+                        </form>
+                    </aside>
+
+                    <!-- Categories Widget -->
+                    <aside class="widget widget-categories">
+                        <div class="widget-title">
+                            <h6>Categories</h6>
+                        </div>
+                        <ul>
+                            {% for category in categories %}
+                            <li>
+                                <a href="?category={{ category.category }}&tag={{ request.GET.tag }}" 
+                                {% if category.category == request.GET.category %}class="text-success"{% endif %}>
+                                {{ category.category }}
+                                <span class="float-right">{{ category.count }}</span>
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </aside>
+                    
+
+                    <!-- Recent Posts Widget -->
+                    <aside class="widget widget-recent-entries-custom">
+                        <div class="widget-title">
+                            <h6>Recent Posts</h6>
+                        </div>
+                        <ul>
+                            {% for recent in recent_posts %}
+                            <li class="clearfix">
+                                <div class="wi">
+                                    <a href="{{ recent.get_absolute_url }}">
+                                        <img src="{{ recent.image.url }}" alt="{{ recent.title }}">
+                                    </a>
+                                </div>
+                                <div class="wb">
+                                    <a href="{{ recent.get_absolute_url }}">{{ recent.title }}</a>
+                                    <span class="post-date">{{ recent.published_date|date:"F d, Y" }}</span>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </aside>
+
+                    <!-- Tags Widget -->
+                    <aside class="widget widget-tag-cloud">
+                        <div class="widget-title">
+                            <h6>Tags</h6>
+                        </div>
+                        <div class="tag-cloud">
+                            {% for tag in tags %}
+                            <a href="?tag={{ tag.name }}&category={{ request.GET.category }}" 
+                            {% if tag.name == request.GET.tag %}class="text-success"{% endif %}>
+                            {{ tag.name }}
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </aside>
+
+                    <aside class="widget widget-tag-cloud">
+                        <div class="widget-title">
+                            <h6>Clear Filters</h6>
+                        </div>
+                        <!-- Clear Filters button that removes category and tag from the URL -->
+                        <a class="btn btn-circle btn-outline-success" href="{% url 'core:blog_list' %}">
+                            <span class="btn-icon-left fas fa-filter"></span> Clear
+                        </a>
+                    </aside>
+                    
+                    
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById('search-input');
+        const searchResultsDropdown = document.getElementById('search-results');
+        const searchForm = document.getElementById('search-form');
+
+        searchInput.addEventListener('input', function () {
+            const query = searchInput.value.trim();
+            if (query.length < 2) {
+                // Hide the search results if query length is less than 2 characters
+                searchResultsDropdown.innerHTML = '';
+                searchResultsDropdown.style.display = 'none';
+                return;
+            }
+
+            // Send AJAX request to search for blogs
+            fetch("{% url 'core:search_blog' %}?q=" + query)
+                .then(response => response.json())
+                .then(data => {
+                    const results = data.results;
+                    if (results.length > 0) {
+                        // Clear previous results and show new ones
+                        searchResultsDropdown.innerHTML = results.map(result => `
+                            <a href="${result.url}" class="search-result-item">
+                                <span class="search-result-title">${result.title}</span>
+                                <img src="${result.image_url}" alt="${result.title}" class="search-result-image">
+                            </a>
+                        `).join('');
+                        searchResultsDropdown.style.display = 'block';
+                    } else {
+                        searchResultsDropdown.innerHTML = '<p>No results found</p>';
+                        searchResultsDropdown.style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    searchResultsDropdown.innerHTML = '<p>Error fetching results</p>';
+                    searchResultsDropdown.style.display = 'block';
+                });
+        });
+
+        // Close the dropdown if user clicks outside
+        document.addEventListener('click', function (e) {
+            if (!searchForm.contains(e.target)) {
+                searchResultsDropdown.style.display = 'none';
+            }
+        });
+    });
+</script>
+{%endblock%}

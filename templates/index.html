@@ -1,0 +1,548 @@
+{% extends 'base.html' %}
+{%load static%}
+
+{% block title %}Home - Politan USA{% endblock %}
+
+{% block content %}
+
+<style>
+    /* Prevent horizontal scrolling globally */
+body, html {
+    overflow-x: hidden;
+}
+
+/* Fix for swiper container and slides */
+.swiper-container {
+    width: 100%;
+    overflow: hidden; /* Prevent any horizontal overflow */
+}
+
+.swiper-slide {
+    width: 100vw; /* Make each slide take the full width of the viewport */
+    overflow: hidden; /* Ensure animations do not overflow */
+    position: relative;
+}
+
+/* Ensure proper alignment on small screens */
+@media (max-width: 768px) {
+    .hero-slider .swiper-slide {
+        height: 100vh;
+        background-size: cover;
+        background-position: center;
+    }
+
+    /* Fix hidden collapsible links on small screens */
+    .inner-navigation.collapse {
+        justify-content: center; /* Center align links */
+        overflow: hidden; /* Prevent elements from spilling out */
+    }
+
+    /* Avoid animation causing overflow */
+    .animate__animated {
+        max-width: 100%; /* Constrain animations within viewport */
+    }
+}
+
+    .hero-slider .swiper-slide {
+        height: 100vh;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+    }
+    
+    .hero-slider .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+    }
+    
+    .container {
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Pagination Dots */
+.swiper-pagination-bullet {
+    background: rgba(255, 255, 255, 0.6); /* Subtle gray dots */
+    transition: all 0.3s ease;
+}
+
+.swiper-pagination-bullet-active {
+    background: #ffffff; /* Active dot stands out */
+    transform: scale(1.2); /* Slightly larger for focus */
+}
+
+
+    
+</style>
+<!-- Hero Section -->
+<section class="module-cover parallax text-center fullscreen">
+    <div class="swiper-container hero-slider">
+        <!-- Slides -->
+        <div class="swiper-wrapper">
+            <!-- Slide 1 -->
+            <div class="swiper-slide" style="background-image: url('{% static "assets/images/main/g104.jpg" %}');">
+                <div class="overlay" style="background: rgba(0, 0, 0, 0.6);"></div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1 class="m-b-20 animate__animated animate__fadeInDown">
+                                <strong>Transforming Outdoor Spaces with Politan USA</strong>
+                            </h1>
+                            <p class="m-b-40 animate__animated animate__fadeInUp">
+                                Safety-focused playground surfaces and premium artificial grass installations.
+                            </p>
+                            <p>
+                                <a class="btn btn-lg btn-circle btn-brand animate__animated animate__zoomIn" href="{% url 'core:services' %}">
+                                    Explore Services
+                                </a>
+                                <a class="btn btn-lg btn-circle btn-outline-new-white animate__animated animate__zoomIn" href="{% url 'core:contact' %}">
+                                    Contact Us
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Slide 2 -->
+            <div class="swiper-slide" style="background-image: url('{% static "assets/images/features/2.jpg" %}');">
+                <div class="overlay" style="background: rgba(0, 0, 0, 0.6);"></div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1 class="m-b-20 animate__animated animate__fadeInDown">
+                                <strong>Innovative Artificial Grass Solutions</strong>
+                            </h1>
+                            <p class="m-b-40 animate__animated animate__fadeInUp">
+                                Transforming outdoor spaces with high-quality, eco-friendly materials designed for durability and style.
+                            </p>
+                            <p>
+                                <a class="btn btn-lg btn-circle btn-brand animate__animated animate__zoomIn" href="{% url 'core:gallery' %}">
+                                    Explore Our Gallery
+                                </a>
+                                <a class="btn btn-lg btn-circle btn-outline-new-white animate__animated animate__zoomIn" href="{% url 'core:contact' %}">
+                                    Contact Us
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="swiper-slide" style="background-image: url('{% static "assets/images/main/p101.jpg" %}');">
+                <div class="overlay" style="background: rgba(0, 0, 0, 0.6);"></div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1 class="m-b-20 animate__animated animate__fadeInDown">
+                                <strong>Revolutionary Artificial Playgrounds</strong>
+                            </h1>
+                            <p class="m-b-40 animate__animated animate__fadeInUp">
+                                Designing safe, sustainable, and visually appealing outdoor playgrounds for children of all ages.
+                            </p>
+                            <p>
+                                <a class="btn btn-lg btn-circle btn-brand animate__animated animate__zoomIn" href="{% url 'core:gallery' %}">
+                                    Explore Our Gallery
+                                </a>
+                                <a class="btn btn-lg btn-circle btn-outline-new-white animate__animated animate__zoomIn" href="{% url 'core:contact' %}">
+                                    Contact Us
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="swiper-slide" style="background-image: url('{% static "assets/images/main/photo24.jpg" %}');">
+                <div class="overlay" style="background: rgba(0, 0, 0, 0.6);"></div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1 class="m-b-20 animate__animated animate__fadeInDown">
+                                <strong>Innovative TPV-E Surfaces</strong>
+                            </h1>
+                            <p class="m-b-40 animate__animated animate__fadeInUp">
+                                Offering durable, versatile, and eco-conscious surfaces ideal for a wide range of applications.
+                            </p>
+                            <p>
+                                <a class="btn btn-lg btn-circle btn-brand animate__animated animate__zoomIn" href="{% url 'core:gallery' %}">
+                                    Explore Our Gallery
+                                </a>
+                                <a class="btn btn-lg btn-circle btn-outline-new-white animate__animated animate__zoomIn" href="{% url 'core:contact' %}">
+                                    Get in Touch
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="swiper-slide" style="background-image: url('{% static "assets/images/main/photo3d19.jpg" %}');">
+                <div class="overlay" style="background: rgba(0, 0, 0, 0.6);"></div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1 class="m-b-20 animate__animated animate__fadeInDown">
+                                <strong>3D Rubber Applications</strong>
+                            </h1>
+                            <p class="m-b-40 animate__animated animate__fadeInUp">
+                                Enhancing outdoor environments with 3D rubber solutions that combine functionality with creative design.
+                            </p>
+                            <p>
+                                <a class="btn btn-lg btn-circle btn-brand animate__animated animate__zoomIn" href="{% url 'core:gallery' %}">
+                                    Explore Our Gallery
+                                </a>
+                                <a class="btn btn-lg btn-circle btn-outline-new-white animate__animated animate__zoomIn" href="{% url 'core:contact' %}">
+                                    Get in Touch
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+
+        </div>
+   
+        <!-- Pagination -->
+        <div class="swiper-pagination"></div>
+    </div>
+</section>
+
+
+<section class="module divider-bottom">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 m-auto text-center">
+                <h1>Safe and Durable Flooring Solutions.</h1>
+                <p class="lead">We provide premium playground flooring and artificial grass solutions tailored to create safe, aesthetically pleasing, and long-lasting surfaces.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="space" data-MY="60px"></div>
+            </div>
+        </div>
+
+        <div class="row align-items-center">
+            <!-- Left Column: Text Content -->
+            <div class="col-md-4 m-auto text-center">
+          
+                <div class="content">
+                    <h6 class="text-success">Innovative Sports Solutions</h6>
+                    <p class="text-muted ">
+                        Sports surfaces designed for quality, durability, and performance. 
+                        From professional fields to recreational areas, we deliver cutting-edge solutions that 
+                        meet your needs.
+                    </p>
+                    <ul class="list-unstyled text-muted ">
+                        <li><i class="bi bi-check-circle-fill text-success me-2"></i>High-quality materials</li>
+                        <li><i class="bi bi-check-circle-fill text-success me-2"></i>Custom design & installation</li>
+                        <li><i class="bi bi-check-circle-fill text-success me-2"></i>Trusted by top sports organizations</li>
+                    </ul>
+                </div>
+            </div>
+        
+            <!-- Vertical Divider -->
+            <div class="col-md-1 d-none d-md-flex justify-content-center">
+                <div class="vertical-divider"></div>
+            </div>
+        
+            <!-- Right Column: Video -->
+            <div class="col-md-7 image-container">
+                <div class="modal-video-container">
+                    <img src="{% static 'assets/images/features/vid-img.jpg' %}" alt="Video Thumbnail" class="img-fluid rounded">
+                    <a class="play-button" href="https://www.youtube.com/watch?v=8t9NXXHJPeo"></a>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+        
+        <style>
+        /* Add a white background to the div */
+        .image-container {
+          
+            text-align: center; /* Optional: Center the image */
+          
+        }
+        
+        /* Make the image responsive and reduce its size */
+        .responsive-img {
+            max-width: 100%; /* Ensures the image scales within the container */
+            height: auto; /* Maintain aspect ratio */
+            max-height: 300px; /* Set a max height to reduce image size */
+        }
+        </style>
+        
+        <div class="row">
+            <div class="col-md-12">
+                <div class="space" data-mY="30px"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-6">
+                <div class="icon-box text-center">
+                    <div class="icon-box-icon"><span class="ti-check-box"></span></div>
+                    <div class="icon-box-title">
+                        <h6>Safety Standards</h6>
+                    </div>
+                    <div class="icon-box-content">
+                        <p>Our flooring meets the highest safety standards, ensuring a secure environment for children and athletes.</p>
+                    </div>
+                    <div class="icon-box-link"><a href="{%url 'core:services'%}">Read More</a></div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="icon-box text-center">
+                    <div class="icon-box-icon"><span class="ti-paint-bucket"></span></div>
+                    <div class="icon-box-title">
+                        <h6>Customizable Designs</h6>
+                    </div>
+                    <div class="icon-box-content">
+                        <p>Choose from a variety of colors, patterns, and textures to match your space and style.</p>
+                    </div>
+                    <div class="icon-box-link"><a href="{%url 'core:services'%}">Read More</a></div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="icon-box text-center">
+                    <div class="icon-box-icon"><span class="ti-panel"></span></div>
+                    <div class="icon-box-title">
+                        <h6>Long-lasting Durability</h6>
+                    </div>
+                    <div class="icon-box-content">
+                        <p>Our surfaces are designed to withstand heavy usage, ensuring durability and resilience over time.</p>
+                    </div>
+                    <div class="icon-box-link"><a href="{%url 'core:services'%}">Read More</a></div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="icon-box text-center">
+                    <div class="icon-box-icon"><span class="ti-layout"></span></div>
+                    <div class="icon-box-title">
+                        <h6>Eco-Friendly Materials</h6>
+                    </div>
+                    <div class="icon-box-content">
+                        <p>We prioritize sustainability, using environmentally friendly materials in all our products.</p>
+                    </div>
+                    <div class="icon-box-link"><a href="{%url 'core:services'%}">Read More</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<section class="module p-b-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 m-auto text-center">
+                <h1>Our Projects.</h1>
+                <p class="lead">Explore our expertly crafted playground flooring and artificial grass installations designed for durability, safety, and beauty.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="space" data-MY="40px"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="filters serif">
+                    <li><a class="current" href="#" data-filter="*">Recent</a></li>
+                    {% for category, label in categories %}
+                        <li><a href="#" data-filter=".{{ category }}">{{ label }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row row-portfolio" data-columns="3">
+            <div class="grid-sizer"></div>
+            {% for project in projects %}
+            <div class="portfolio-item {{ project.category }}">
+                <div class="portfolio-item-wrapper">
+                    <a href="{% url 'core:project_detail' project.slug %}">
+                        <div class="portfolio-item-img">
+                            <!-- Display the first image -->
+                            {% with project.images.first as first_image %}
+                                {% if first_image %}
+                                    <img src="{{ first_image.image.url }}" alt="{{ project.title }}">
+                                {% else %}
+                                    <img src="{% static 'assets/images/default.jpg' %}" alt="Default Image">
+                                {% endif %}
+                            {% endwith %}
+                        </div>
+                        <div class="portfolio-item-caption">
+                            <h6 class="portfolio-item-title">{{ project.title }}</h6>
+                            <span class="portfolio-item-subtitle serif">{{ project.description }}</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section class="module">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-6">
+                <div class="icon-box">
+                    <div class="icon-box-icon"><span class="ti-paint-bucket"></span></div>
+                    <div class="icon-box-title">
+                        <h6>Playground Surfacing</h6>
+                    </div>
+                    <div class="icon-box-content">
+                        <p>We offer high-quality, durable, and safe playground surfaces designed to provide optimal protection and long-lasting use.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="icon-box">
+                    <div class="icon-box-icon"><span class="fas fa-leaf"></span></div>
+                    <div class="icon-box-title">
+                        <h6>Artificial Grass Installation</h6>
+                    </div>
+                    <div class="icon-box-content">
+                        <p>Our artificial grass solutions are perfect for playgrounds, sports fields, and landscaping, combining aesthetics and functionality.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="icon-box">
+                    <div class="icon-box-icon"><span class="ti-ruler-pencil"></span></div>
+                    <div class="icon-box-title">
+                        <h6>Custom Design</h6>
+                    </div>
+                    <div class="icon-box-content">
+                        <p>Every project is unique, and we provide custom designs tailored to your specific needs and preferences.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="icon-box">
+                    <div class="icon-box-icon"><span class="ti-shield"></span></div>
+                    <div class="icon-box-title">
+                        <h6>Safety Compliance</h6>
+                    </div>
+                    <div class="icon-box-content">
+                        <p>Our surfaces meet the highest safety standards to ensure a secure environment for children and users of all ages.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="icon-box">
+                    <div class="icon-box-icon"><span class="ti-timer"></span></div>
+                    <div class="icon-box-title">
+                        <h6>Timely Installations</h6>
+                    </div>
+                    <div class="icon-box-content">
+                        <p>Our expert team ensures efficient and timely installations to meet your project deadlines without compromising quality.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="icon-box">
+                    <div class="icon-box-icon"><span class="ti-headphone-alt"></span></div>
+                    <div class="icon-box-title">
+                        <h6>Reliable Support</h6>
+                    </div>
+                    <div class="icon-box-content">
+                        <p>We provide exceptional customer support from consultation to post-installation, ensuring your complete satisfaction.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Services end-->
+
+<section class="module py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 m-auto text-center">
+                <h1 class="mb-3">Our Valued Clients</h1>
+                <p class="lead text-muted">
+                    We are proud to collaborate with industry leaders and globally recognized brands, delivering exceptional results and fostering lasting partnerships.
+                </p>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="owl-carousel clients-carousel" data-carousel-options="{'dots': false, 'loop': true, 'autoplay': true, 'autoplayTimeout': 3000, 'responsive': {'0': {'items': 2}, '768': {'items': 4}, '1200': {'items': 6}}}">
+                    {% for client in clients %}
+                    <div class="client">
+                        <img src="{{ client.logo.url }}" alt="{{ client.name }}" class="img-fluid" title="{{ client.name }}">
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script>
+    const swiper = new Swiper('.hero-slider', {
+        loop: true,
+        autoplay: {
+            delay: 5000,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true, // Pagination dots for navigation
+        },
+        effect: 'fade', // Smooth fade effect for transitions
+
+    
+
+    });
+
+    
+    
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const filters = document.querySelectorAll('.filters a');
+        const portfolioItems = document.querySelectorAll('.portfolio-item');
+
+        filters.forEach(filter => {
+            filter.addEventListener('click', e => {
+                e.preventDefault();
+
+                // Remove active class from all filters
+                filters.forEach(f => f.classList.remove('current'));
+                // Add active class to the clicked filter
+                filter.classList.add('current');
+
+                const filterClass = filter.getAttribute('data-filter');
+
+                portfolioItems.forEach(item => {
+                    if (filterClass === '*' || item.classList.contains(filterClass.substring(1))) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+
+
+{% endblock %}

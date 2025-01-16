@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+{%load static%}
+{% block content %}
+<!-- Portfolio Single -->
+<section class="module">
+    <div class="container">
+        <div class="row">
+            
+            <div class="col-md-8">
+                <div class="row gallery-group">
+                    {% for image in service.images.all %}
+                        <div class="col-md-6 m-b-30">
+                            <a href="{{ image.image.url }}" title="{{ image.caption|default:service.name }}">
+                                <img src="{{ image.image.url }}" alt="{{ image.caption|default:service.name }}">
+                            </a>
+                        </div>
+                    {% empty %}
+                        <p>No images available for this service.</p>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="sticky-sidebar">
+                    <h6 class="single-portfolio-title">{{ service.name }}</h6>
+                    <p>{{ service.description }}</p>
+                    <hr class="m-t-30 m-b-30">
+                    <form id="quote-form" method="post" novalidate>
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="quote-name">Your Name</label>
+                            <input type="text" id="quote-name" name="name" class="form-control" placeholder="Enter your name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="quote-email">Your Email</label>
+                            <input type="email" id="quote-email" name="email" class="form-control" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="quote-service">Service Type</label>
+                            <select id="quote-service" name="service" class="form-control" required>
+                                {% if service %}
+                                    <option value="{{ service.name }}" selected>{{ service.name }}</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="quote-details">Project Details</label>
+                            <textarea id="quote-details" name="details" class="form-control" rows="5" placeholder="Provide details about your project"></textarea>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-brand btn-circle" id="submit-quote-button">
+                                Get Quote
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <div id="quote-alert-placeholder"></div>
+                    
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</section>
+
+<!-- Related Services -->
+<!-- Related Services -->
+<section class="module divider-top">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-9 m-auto text-center">
+                <h5>You may also like:</h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="space" data-MY="40px"></div>
+            </div>
+        </div>
+        <div class="row row-portfolio" data-columns="3">
+            <div class="grid-sizer"></div>
+            <div class="portfolio-item branding">
+                <div class="portfolio-item-wrapper">
+                    <a href="{% url 'core:get_quote' 'playground-safety-flooring' %}">
+                        <div class="portfolio-item-img">
+                            <img src="{% static 'assets/images/portfolio/1.jpg' %}" alt="Playground Safety Flooring">
+                        </div>
+                        <div class="portfolio-item-caption">
+                            <h6 class="portfolio-item-title">Playground Safety Flooring</h6>
+                            <span class="portfolio-item-subtitle serif">Durable and Safe</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="portfolio-item digital">
+                <div class="portfolio-item-wrapper">
+                    <a href="{% url 'core:get_quote' 'artificial-grass-installation' %}">
+                        <div class="portfolio-item-img">
+                            <img src="{% static 'assets/images/portfolio/2.jpg' %}" alt="Artificial Grass Installation">
+                        </div>
+                        <div class="portfolio-item-caption">
+                            <h6 class="portfolio-item-title">Artificial Grass Installation</h6>
+                            <span class="portfolio-item-subtitle serif">Eco-Friendly & Low Maintenance</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="portfolio-item packaging">
+                <div class="portfolio-item-wrapper">
+                    <a href="{% url 'core:get_quote' 'rubber-mulch' %}">
+                        <div class="portfolio-item-img">
+                            <img src="{% static 'assets/images/portfolio/3.jpg' %}" alt="Rubber Mulch">
+                        </div>
+                        <div class="portfolio-item-caption">
+                            <h6 class="portfolio-item-title">Rubber Mulch</h6>
+                            <span class="portfolio-item-subtitle serif">Eco-Friendly and Durable</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    $(document).ready(function () {
+        $("#quote-form").on("submit", function (e) {
+            e.preventDefault();
+
+            // Get the submit button
+            const submitButton = $("#submit-quote-button");
+
+            // Disable the button and add spinner
+            submitButton.html(`
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Sending...
+            `).prop("disabled", true);
+
+            // Get form data
+            const formData = $(this).serialize();
+
+            // Perform the AJAX request
+            $.ajax({
+                url: "{% url 'core:submit_quote' %}",
+                method: "POST",
+                data: formData,
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}", // Add CSRF token header
+                },
+                success: function (response) {
+                    // Reset the button state
+                    submitButton.html("Get Quote").prop("disabled", false);
+
+                    // Display success alert
+                    $("#quote-alert-placeholder").html(`
+                        <div class="alert alert-success">
+                            <strong>Success!</strong> Your quote request has been submitted.
+                        </div>
+                    `);
+
+                    // Optionally, reset the form
+                    $("#quote-form")[0].reset();
+                },
+                error: function (xhr, status, error) {
+                    // Reset the button state
+                    submitButton.html("Get Quote").prop("disabled", false);
+
+                    // Display error alert
+                    $("#quote-alert-placeholder").html(`
+                        <div class="alert alert-danger">
+                            <strong>Error!</strong> Unable to submit your quote request. Please try again later.
+                        </div>
+                    `);
+                }
+            });
+        });
+    });
+</script>
+
+
+{% endblock %}

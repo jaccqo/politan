@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="module-cover text-center" data-background="{% static 'assets/images/module-3.jpg' %}" data-overlay="0.5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="text-white">Welcome to Politan USA</h1>
+                <p class="text-white">Your trusted partner for playground safety and artificial grass solutions.</p>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Hero Section end -->
+
+<!-- About Us -->
+<section class="module">
+    
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <p><img src="{% static 'assets/images/main/about.jpg' %}" alt="About Politan USA" class="img-fluid"></p>
+            </div>
+            <div class="col-lg-5 offset-lg-1">
+                <h2>Who We Are</h2>
+                <p class="lead">Politan USA specializes in creating safe, sustainable, and visually stunning surfaces for playgrounds and landscapes across the USA.</p>
+                <ul class="arrow-list">
+                    <li>High-quality materials</li>
+                    <li>Custom installation solutions</li>
+                    <li>Eco-friendly options</li>
+                    <li>Commitment to safety and aesthetics</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- About Us end -->
+
+<!-- Testimonials -->
+
+<section class="module bg-gray">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-9 m-auto text-center">
+                <h3>Loved by 50,000+ Customers</h3>
+                <p class="lead">Read what our clients have to say about our exceptional services and commitment to quality.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="space" data-MY="40px"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="owl-carousel review-carousel">
+                    {% for testimonial in testimonials %}
+                    <div class="review-card">
+                        <div class="review-card-content">
+                            <p>{{ testimonial.review }}</p>
+                        </div>
+                        <div class="review-card-author">
+                            <div class="review-card-author-info">
+                                <h6 class="review-card-author-title">{{ testimonial.client_name }}</h6>
+                                <span class="star-rating">
+                                    <!-- Loop for filled stars -->
+                                    {% for i in testimonial.rating|range_filter %}
+                                    <i class="fas fa-star"></i>
+                                    {% endfor %}
+                                    <!-- Loop for empty stars -->
+                                    {% for i in 5|subtract:testimonial.rating|range_filter %}
+                                    <i class="far fa-star"></i>
+                                    {% endfor %}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- Testimonials end -->
+{% endblock %}

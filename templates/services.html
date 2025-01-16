@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{%load static%}
+{% block content %}
+
+
+
+<section class="module">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-9 m-auto text-center">
+                <h3 class="fw-bold text-dark">Let’s Build Your Perfect Outdoor Space</h3>
+                <p class="lead text-muted">
+                    Contact us today to get started on your playground safety flooring or artificial grass installation project.
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            {% for service in services %}
+            <div class="col-md-4">
+                <div class="feature">
+                    <div class="feature-thumb">
+                        <!-- Display the first image of the service -->
+                        {% with service.images.first as first_image %}
+                            {% if first_image %}
+                                <img class="img-fluid" src="{{ first_image.image.url }}" alt="{{ service.name }}">
+                            {% else %}
+                                <img class="img-fluid" src="{% static 'assets/images/default.jpg' %}" alt="Default Image">
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                    <div class="feature-content">
+                        <h6 class="fw-bold text-dark">{{ service.name }}</h6>
+                        <p class="text-muted">{{ service.description }}</p>
+                        <a class="btn btn-outline-brand btn-circle mt-3" href="{% url 'core:get_quote' service.slug %}">Get a Quote</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+
+
+
+<section class="module divider-top">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-9 m-auto text-center">
+                <h2 class="fw-bold text-dark">Why Choose Politan USA?</h2>
+                <p class="lead text-muted">
+                   With 20+ years of Experience, At Politan USA, we specialize in creating safe and beautiful outdoor spaces. From playground safety surfaces to eco-friendly artificial grass, we deliver quality solutions for your needs.
+                </p>
+            </div>
+        </div>
+        <div class="row justify-content-center my-5">
+            <div class="col-md-8">
+                <div class="card shadow p-3 mb-5 bg-white rounded">
+                    <img class="img-fluid card-img-top" src="{% static 'assets/images/main/photo19.jpg' %}" alt="Playground Safety Flooring">
+                </div>
+            </div>
+        </div>
+        
+        
+        <div class="row">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="icon-box icon-box-left">
+                    <div class="icon-box-icon"><span class="fas fa-shield-alt"></span></div>
+                    <div class="icon-box-title">
+                        <h6 class="fw-bold">Safety-Certified Surfaces</h6>
+                    </div>
+                    <div class="icon-box-content">
+                        <p>Our playground surfaces meet the highest safety standards, ensuring peace of mind for parents and caregivers.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="icon-box icon-box-left">
+                    <div class="icon-box-icon"><span class="fas fa-leaf"></span></div>
+                    <div class="icon-box-title">
+                        <h6 class="fw-bold">Eco-Friendly Artificial Grass</h6>
+                    </div>
+                    <div class="icon-box-content">
+                        <p>Our synthetic grass solutions are environmentally friendly, requiring minimal maintenance while looking stunning.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="icon-box icon-box-left">
+                    <div class="icon-box-icon"><span class="fas fa-tools"></span></div>
+                    <div class="icon-box-title">
+                        <h6 class="fw-bold">Custom Installations</h6>
+                    </div>
+                    <div class="icon-box-content">
+                        <p>We tailor every installation to suit your space, ensuring a perfect fit and long-lasting results.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

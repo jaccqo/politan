@@ -1,0 +1,81 @@
+div class="col-lg-4 order-lg-1">
+                <div class="sidebar">
+
+                    <!-- Search Widget -->
+                    <aside class="widget widget-search">
+                        <form id="search-form">
+                            <input class="form-control" type="search" id="search-input" placeholder="Type Search Words" autocomplete="off">
+                         
+                            <div id="search-results" class="search-results-dropdown"></div>
+                        </form>
+                    </aside>
+
+                    <!-- Categories Widget -->
+                    <aside class="widget widget-categories">
+                        <div class="widget-title">
+                            <h6>Categories</h6>
+                        </div>
+                        <ul>
+                            {% for category in categories %}
+                            <li>
+                                <a href="?category={{ category.category }}&tag={{ request.GET.tag }}" 
+                                {% if category.category == request.GET.category %}class="text-success"{% endif %}>
+                                {{ category.category }}
+                                <span class="float-right">{{ category.count }}</span>
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </aside>
+                    
+
+                    <!-- Recent Posts Widget -->
+                    <aside class="widget widget-recent-entries-custom">
+                        <div class="widget-title">
+                            <h6>Recent Posts</h6>
+                        </div>
+                        <ul>
+                            {% for recent in recent_posts %}
+                            <li class="clearfix">
+                                <div class="wi">
+                                    <a href="{{ recent.get_absolute_url }}">
+                                        <img src="{{ recent.image.url }}" alt="{{ recent.title }}">
+                                    </a>
+                                </div>
+                                <div class="wb">
+                                    <a href="{{ recent.get_absolute_url }}">{{ recent.title }}</a>
+                                    <span class="post-date">{{ recent.published_date|date:"F d, Y" }}</span>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </aside>
+
+                    <!-- Tags Widget -->
+                    <aside class="widget widget-tag-cloud">
+                        <div class="widget-title">
+                            <h6>Tags</h6>
+                        </div>
+                        <div class="tag-cloud">
+                            {% for tag in tags %}
+                            <a href="?tag={{ tag.name }}&category={{ request.GET.category }}" 
+                            {% if tag.name == request.GET.tag %}class="text-success"{% endif %}>
+                            {{ tag.name }}
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </aside>
+
+                    <aside class="widget widget-tag-cloud">
+                        <div class="widget-title">
+                            <h6>Clear Filters</h6>
+                        </div>
+                        <!-- Clear Filters button that removes category and tag from the URL -->
+                        <a class="btn btn-circle btn-outline-success" href="{% url 'core:blog_list' %}">
+                            <span class="btn-icon-left fas fa-filter"></span> Clear
+                        </a>
+                    </aside>
+                    
+                    
+                </div>
+            </div>

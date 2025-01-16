@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="module p-b-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 m-auto text-center">
+                <h1>Our Projects</h1>
+                <p class="lead">Explore our expertly crafted playground flooring and artificial grass installations designed for durability, safety, and beauty.</p>
+            </div>
+        </div>
+       
+    </div>
+    
+</section>
+
+<section class="module p-t-35 p-b-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="filters serif">
+                    <li><a class="current" href="#" data-filter="*">All</a></li>
+                    {% for category in categories %}
+                 
+                        <li><a href="#" data-filter=".{{ category|lower }}">{{ category }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row row-portfolio" data-columns="4">
+            <div class="grid-sizer"></div>
+            {% for project in projects %}
+                <div class="portfolio-item {{ project.category|lower }}">
+                    <div class="portfolio-item-wrapper">
+                        <div class="portfolio-item-img">
+                            <img src="{{ project.images.first.image.url }}" alt="{{ project.title }}">
+                        </div>
+                        <div class="portfolio-item-caption">
+                            <h6 class="portfolio-item-title">{{ project.title }}</h6>
+                            <span class="portfolio-item-subtitle serif">{{ project.description|truncatewords:10 }}</span>
+                        </div>
+                        <a class="portfolio-item-link" href="{% url 'core:project_detail' project.slug %}"></a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</section>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const filterLinks = document.querySelectorAll('.filters a');
+        const portfolioItems = document.querySelectorAll('.portfolio-item');
+
+        filterLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const filter = link.getAttribute('data-filter');
+
+                // Remove the 'current' class from all links and add it to the clicked one
+                filterLinks.forEach(link => link.classList.remove('current'));
+                link.classList.add('current');
+
+                // Show/hide portfolio items based on the selected category
+                portfolioItems.forEach(item => {
+                    if (filter === '*' || item.classList.contains(filter)) {
+                        item.style.display = 'block'; // Show item
+                    } else {
+                        item.style.display = 'none'; // Hide item
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+
+
+
+
+{% endblock %}
