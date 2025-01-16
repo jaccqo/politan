@@ -151,4 +151,4 @@ EMAIL_HOST_USER = 'syncinformed@gmail.com'
 EMAIL_HOST_PASSWORD = 'xsphxcnzywuboybo'  # Your app password without spaces
 DEFAULT_FROM_EMAIL = 'syncinformed@gmail.com'
 
-CONTACT_EMAIL = 'kinginjack@gmail.com'  # Replace with the email address to receive contact form messages
+CONTACT_EMAIL = 'nivbiton3768@gmail.com'  # Replace with the email address to receive contact form messages
